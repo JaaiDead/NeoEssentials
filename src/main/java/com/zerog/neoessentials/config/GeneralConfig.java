@@ -42,16 +42,7 @@ public class GeneralConfig {
     public static final ModConfigSpec.BooleanValue ENABLE_TELEPORTATION = BUILDER
         .comment("Enable all teleportation commands (home, warp, tpa, etc.)")
         .define("enableTeleportation", true);
-    
-    // Homes
-    public static final ModConfigSpec.BooleanValue ENABLE_HOMES = BUILDER
-        .comment("Enable the home system")
-        .define("enableHomes", true);
-    
-    // Warps
-    public static final ModConfigSpec.BooleanValue ENABLE_WARPS = BUILDER
-        .comment("Enable the warp system")
-        .define("enableWarps", true);
+
     
     // Kits
     public static final ModConfigSpec.BooleanValue ENABLE_KITS = BUILDER

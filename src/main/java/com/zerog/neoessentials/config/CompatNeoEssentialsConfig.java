@@ -46,7 +46,6 @@ public class CompatNeoEssentialsConfig {
         
         // Initialize default permissions map for commonly used permissions
         try {
-            defaultPermissions.put("neoessentials.command.back", true);
             defaultPermissions.put("neoessentials.command.spawn", true);
             defaultPermissions.put("neoessentials.command.kit", true);
         } catch (Exception e) {
@@ -123,16 +122,6 @@ public class CompatNeoEssentialsConfig {
         String commandLower = command.toLowerCase();
         
         switch (commandLower) {
-            case "home":
-                enabled = ConfigUtil.getConfigSafe(GeneralConfig.ENABLE_HOMES, true);
-                break;
-            case "warp":
-                enabled = ConfigUtil.getConfigSafe(GeneralConfig.ENABLE_WARPS, true);
-                break;
-            case "tpa":
-            case "back":
-                enabled = ConfigUtil.getConfigSafe(GeneralConfig.ENABLE_TELEPORTATION, true);
-                break;
             case "kit":
                 enabled = ConfigUtil.getConfigSafe(GeneralConfig.ENABLE_KITS, true);
                 break;

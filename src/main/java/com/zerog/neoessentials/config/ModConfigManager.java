@@ -53,22 +53,7 @@ public class ModConfigManager {    // Reference to the main mod instance
     public boolean isEconomyEnabled() {
         return GeneralConfig.ENABLE_ECONOMY.get();
     }
-    
-    /**
-     * Check if the home system is enabled
-     * @return True if enabled
-     */
-    public boolean isHomesEnabled() {
-        return GeneralConfig.ENABLE_HOMES.get();
-    }
-    
-    /**
-     * Check if the warp system is enabled
-     * @return True if enabled
-     */
-    public boolean isWarpsEnabled() {
-        return GeneralConfig.ENABLE_WARPS.get();
-    }
+
     
     /**
      * Check if the kit system is enabled

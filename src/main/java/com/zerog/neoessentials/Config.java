@@ -1,3 +1,4 @@
+/*
 package com.zerog.neoessentials;
 
 import java.util.List;
@@ -40,3 +41,4 @@ public class Config {
         return obj instanceof String itemName && BuiltInRegistries.ITEM.containsKey(ResourceLocation.parse(itemName));
     }
 }
+*/

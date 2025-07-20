@@ -6,11 +6,13 @@ import com.zerog.neoessentials.NeoEssentials;
 import com.zerog.neoessentials.data.MailManager;
 import com.zerog.neoessentials.utils.TextUtil;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+@EventBusSubscriber
 public class ServerWelcomeMessage {
 
     @SubscribeEvent
