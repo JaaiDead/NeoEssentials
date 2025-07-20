@@ -5,16 +5,11 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Main data manager class that initializes and manages all data storage components.
  */
 public class DataManager {    private UserManager userManager;
-    private HomeManager homeManager;
-    private WarpManager warpManager;
     private SpawnManager spawnManager;
     private KitManager kitManager;    
     private JailManager jailManager;
@@ -37,8 +32,6 @@ public class DataManager {    private UserManager userManager;
         
         // Initialize all managers
         userManager = new UserManager();
-        homeManager = new HomeManager();
-        warpManager = new WarpManager();
         spawnManager = new SpawnManager();
         kitManager = new KitManager();        
         jailManager = new JailManager(dataFolderFile);
@@ -61,8 +54,6 @@ public class DataManager {    private UserManager userManager;
     public void initialize() {
         NeoEssentials.LOGGER.info("Initializing NeoEssentials Data Manager");            // Initialize all data managers
         userManager.initialize();
-        homeManager.initialize();
-        warpManager.initialize();
         spawnManager.initialize();
         kitManager.initialize();
         // Initialize tablist manager
@@ -82,14 +73,6 @@ public class DataManager {    private UserManager userManager;
         // Create manager instances if they don't exist
         if (userManager == null) {
             userManager = new UserManager();
-        }
-        
-        if (homeManager == null) {
-            homeManager = new HomeManager();
-        }
-        
-        if (warpManager == null) {
-            warpManager = new WarpManager();
         }
         
         if (spawnManager == null) {
@@ -141,8 +124,6 @@ public class DataManager {    private UserManager userManager;
         // Check if storage manager is initialized
         if (NeoEssentials.getInstance().getStorageManager() != null) {
             // Reload warps data
-            warpManager.reloadWarps();
-            
             // Reload other data as needed
             // homeManager.reloadHomes();
             // kitManager.reloadKits();
@@ -158,9 +139,8 @@ public class DataManager {    private UserManager userManager;
      * Save all data to disk
      */
     public void saveAll() {
-        NeoEssentials.LOGGER.info("Saving all NeoEssentials data");        userManager.saveAll();
-        homeManager.saveAll();
-        warpManager.saveAll();
+        NeoEssentials.LOGGER.info("Saving all NeoEssentials data");
+        userManager.saveAll();
         spawnManager.saveSpawnData();
         kitManager.saveKits();
         jailManager.saveJails();
@@ -195,24 +175,7 @@ public class DataManager {    private UserManager userManager;
     public UserManager getUserManager() {
         return userManager;
     }
-    
-    /**
-     * Gets the home manager instance
-     * 
-     * @return The home manager
-     */
-    public HomeManager getHomeManager() {
-        return homeManager;
-    }
-    
-    /**
-     * Gets the warp manager instance
-     * 
-     * @return The warp manager
-     */
-    public WarpManager getWarpManager() {
-        return warpManager;
-    }
+
     
     /**
      * Gets the spawn manager instance
@@ -333,20 +296,5 @@ public class DataManager {    private UserManager userManager;
             return null;
         }    }
     
-    /**
-     * Get all warps in the system
-     * 
-     * @return A list of all warp data objects
-     */    public List<WarpData> getAllWarps() {
-        // Load all warps from storage
-        Map<String, WarpData> warpMap = NeoEssentials.getInstance().getStorageManager().loadWarps();
-        
-        // Convert to list
-        List<WarpData> warpList = new ArrayList<>();
-        if (warpMap != null) {
-            warpList.addAll(warpMap.values());
-        }
-        
-        return warpList;
-    }
+
 }

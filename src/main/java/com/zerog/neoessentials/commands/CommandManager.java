@@ -24,16 +24,12 @@ import net.neoforged.bus.api.SubscribeEvent;
  */
 
 public class CommandManager {    // Command classes
-    private final TeleportCommands teleportCommands;
-    private final DirectTeleportCommands directTeleportCommands;
     private final TeleportBookmarkCommands teleportBookmarkCommands;
     private final WorldManagementCommands worldManagementCommands;
     private final PlayerStatsCommands playerStatsCommands;
     private final AdvancedUtilityCommands advancedUtilityCommands;
     private final WorldCommands worldCommands;
-    private final HomeCommands homeCommands;
     private final UserCommands userCommands;
-    private final WarpCommands warpCommands;
     private final KitCommands kitCommands;
     private final TimeAndWeatherCommands timeAndWeatherCommands;
     private final InventoryCommands inventoryCommands;
@@ -61,16 +57,12 @@ public class CommandManager {    // Command classes
       public CommandManager() {
         // mod reference removed while disabling debug commands
         
-        teleportCommands = new TeleportCommands();
-        directTeleportCommands = new DirectTeleportCommands();
         teleportBookmarkCommands = new TeleportBookmarkCommands();
         worldManagementCommands = new WorldManagementCommands();
         playerStatsCommands = new PlayerStatsCommands();
         advancedUtilityCommands = new AdvancedUtilityCommands();
         worldCommands = new WorldCommands();
-        homeCommands = new HomeCommands();
         userCommands = new UserCommands();
-        warpCommands = new WarpCommands();
         kitCommands = new KitCommands();
         timeAndWeatherCommands = new TimeAndWeatherCommands();
         inventoryCommands = new InventoryCommands();
@@ -133,12 +125,7 @@ public class CommandManager {    // Command classes
      * 
      * @param dispatcher The command dispatcher
      */    private void registerAllCommands(CommandDispatcher<CommandSourceStack> dispatcher) {        // Register teleport commands
-        teleportCommands.register(dispatcher);
-        NeoEssentials.LOGGER.info("Registered teleport commands");
-        
-        // Register direct teleport commands
-        directTeleportCommands.register(dispatcher);
-        NeoEssentials.LOGGER.info("Registered direct teleport commands");
+
         
         // Register teleport bookmark commands
         teleportBookmarkCommands.register(dispatcher);
@@ -164,17 +151,10 @@ public class CommandManager {    // Command classes
         worldCommands.register(dispatcher);
         NeoEssentials.LOGGER.info("Registered world management commands");
         
-        // Register home commands
-        homeCommands.register(dispatcher);
-        NeoEssentials.LOGGER.info("Registered home commands");
-        
         // Register user commands
         userCommands.register(dispatcher);
         NeoEssentials.LOGGER.info("Registered user commands");
-        
-        // Register warp commands
-        warpCommands.register(dispatcher);
-        NeoEssentials.LOGGER.info("Registered warp commands");
+
         
         // Register kit commands
         kitCommands.register(dispatcher);
@@ -286,24 +266,7 @@ public class CommandManager {    // Command classes
         NeoEssentials.LOGGER.info("Skipping ItemCommands registration due to CommandBuildContext requirements");
     }
     
-    /**
-     * Gets the teleport commands instance
-     * 
-     * @return The teleport commands
-     */
-    public TeleportCommands getTeleportCommands() {
-        return teleportCommands;
-    }
-    
-    /**
-     * Gets the home commands instance
-     * 
-     * @return The home commands
-     */
-    public HomeCommands getHomeCommands() {
-        return homeCommands;
-    }
-    
+
     /**
      * Gets the user commands instance
      * 
@@ -311,14 +274,6 @@ public class CommandManager {    // Command classes
      */    
     public UserCommands getUserCommands() {
         return userCommands;
-    }
-      /**
-     * Gets the warp commands instance
-     * 
-     * @return The warp commands
-     */
-    public WarpCommands getWarpCommands() {
-        return warpCommands;
     }
       /**
      * Gets the kit commands instance

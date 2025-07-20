@@ -6,11 +6,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
 import com.zerog.neoessentials.NeoEssentials;
-import com.zerog.neoessentials.data.HomeData;
 import com.zerog.neoessentials.data.KitManager;
-import com.zerog.neoessentials.data.WarpData;
 
 import net.minecraft.core.BlockPos;
 
@@ -18,7 +15,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,9 +26,7 @@ import java.util.UUID;
  */
 public class JsonStorageHandler implements StorageHandler {
     private static final String BASE_DIR = "neoessentials";
-    private static final String HOMES_DIR = BASE_DIR + "/homes";
     private static final String ECONOMY_DIR = BASE_DIR + "/economy";
-    private static final String WARPS_FILE = BASE_DIR + "/warps.json";
     private static final String KITS_FILE = BASE_DIR + "/kits.json";
     private static final String SPAWN_FILE = BASE_DIR + "/spawn.json";
     
@@ -49,7 +43,6 @@ public class JsonStorageHandler implements StorageHandler {
     public void initialize() {
         // Create directories if they don't exist
         createDirectory(BASE_DIR);
-        createDirectory(HOMES_DIR);
         createDirectory(ECONOMY_DIR);
         
         NeoEssentials.LOGGER.info("Initialized JSON storage handler");
@@ -67,228 +60,7 @@ public class JsonStorageHandler implements StorageHandler {
             NeoEssentials.LOGGER.error("Failed to create directory: {}", path);
         }
     }
-    
-    @Override
-    public boolean saveHomeData(UUID uuid, Map<String, HomeData> homes) {
-        try {
-            File file = new File(HOMES_DIR + "/" + uuid.toString() + ".json");
-            JsonObject rootObj = new JsonObject();
-            JsonObject homesObj = new JsonObject();
-            
-            for (Map.Entry<String, HomeData> entry : homes.entrySet()) {
-                String homeName = entry.getKey();
-                HomeData home = entry.getValue();
-                
-                JsonObject homeObj = new JsonObject();
-                homeObj.addProperty("dimension", home.getDimension());
-                
-                // Save position
-                JsonObject posObj = new JsonObject();
-                posObj.addProperty("x", home.getPosition().getX());
-                posObj.addProperty("y", home.getPosition().getY());
-                posObj.addProperty("z", home.getPosition().getZ());
-                homeObj.add("position", posObj);
-                
-                // Save rotation
-                homeObj.addProperty("pitch", home.getPitch());
-                homeObj.addProperty("yaw", home.getYaw());
-                
-                homesObj.add(homeName, homeObj);
-            }
-            
-            rootObj.add("homes", homesObj);
-            
-            try (FileWriter writer = new FileWriter(file)) {
-                gson.toJson(rootObj, writer);
-            }
-            
-            return true;
-        } catch (IOException e) {
-            NeoEssentials.LOGGER.error("Failed to save home data for {}: {}", uuid, e.getMessage());
-            return false;
-        }
-    }
-    
-    @Override
-    public Map<String, HomeData> loadHomeData(UUID uuid) {
-        Map<String, HomeData> homes = new HashMap<>();
-        
-        try {
-            File file = new File(HOMES_DIR + "/" + uuid.toString() + ".json");
-            
-            if (!file.exists()) {
-                return homes;
-            }
-            
-            JsonObject rootObj;
-            try (FileReader reader = new FileReader(file)) {
-                rootObj = JsonParser.parseReader(reader).getAsJsonObject();
-            }
-            
-            if (rootObj.has("homes")) {
-                JsonObject homesObj = rootObj.getAsJsonObject("homes");
-                
-                for (Map.Entry<String, JsonElement> entry : homesObj.entrySet()) {
-                    String homeName = entry.getKey();
-                    JsonObject homeObj = entry.getValue().getAsJsonObject();
-                    
-                    String dimension = homeObj.get("dimension").getAsString();
-                    
-                    // Load position
-                    JsonObject posObj = homeObj.getAsJsonObject("position");
-                    int x = posObj.get("x").getAsInt();
-                    int y = posObj.get("y").getAsInt();
-                    int z = posObj.get("z").getAsInt();
-                    BlockPos pos = new BlockPos(x, y, z);
-                    
-                    // Load rotation
-                    float pitch = homeObj.get("pitch").getAsFloat();
-                    float yaw = homeObj.get("yaw").getAsFloat();
-                    
-                    homes.put(homeName, new HomeData(dimension, pos, pitch, yaw));
-                }
-            }
-            
-            return homes;
-        } catch (Exception e) {
-            NeoEssentials.LOGGER.error("Failed to load home data for {}: {}", uuid, e.getMessage());
-            return homes;
-        }
-    }
-      @Override
-    public boolean saveWarps(Map<String, WarpData> warps) {
-        NeoEssentials.LOGGER.info("JsonStorageHandler: Saving {} warps to {}", warps.size(), WARPS_FILE);
-        
-        try {
-            File file = new File(WARPS_FILE);
-            
-            // Create parent directory if it doesn't exist
-            File parentDir = file.getParentFile();
-            if (!parentDir.exists() && !parentDir.mkdirs()) {
-                NeoEssentials.LOGGER.error("Failed to create directory: {}", parentDir.getAbsolutePath());
-                return false;
-            }
-            
-            JsonObject rootObj = new JsonObject();
-            JsonObject warpsObj = new JsonObject();
-            
-            for (Map.Entry<String, WarpData> entry : warps.entrySet()) {
-                String warpName = entry.getKey();
-                WarpData warp = entry.getValue();
-                
-                try {
-                    JsonObject warpObj = new JsonObject();
-                    warpObj.addProperty("name", warp.getName());
-                    warpObj.addProperty("dimension", warp.getDimension());
-                    
-                    BlockPos position = warp.getPosition();
-                    // Save position
-                    JsonObject posObj = new JsonObject();
-                    posObj.addProperty("x", position.getX());
-                    posObj.addProperty("y", position.getY());
-                    posObj.addProperty("z", position.getZ());
-                    warpObj.add("position", posObj);
-                    
-                    // Save rotation
-                    warpObj.addProperty("pitch", warp.getPitch());
-                    warpObj.addProperty("yaw", warp.getYaw());
-                    
-                    // Save permission
-                    if (warp.getPermission() != null) {
-                        warpObj.addProperty("permission", warp.getPermission());
-                    }
-                    
-                    warpsObj.add(warpName, warpObj);
-                    NeoEssentials.LOGGER.debug("Prepared warp '{}' at [{}, {}, {}] in dimension '{}' for saving", 
-                        warpName, position.getX(), position.getY(), position.getZ(), warp.getDimension());
-                } catch (Exception e) {
-                    NeoEssentials.LOGGER.error("Error preparing warp '{}' for saving: {}", warpName, e.getMessage());
-                }
-            }
-            
-            rootObj.add("warps", warpsObj);
-            
-            try (FileWriter writer = new FileWriter(file)) {
-                gson.toJson(rootObj, writer);
-            }
-            
-            NeoEssentials.LOGGER.info("Successfully saved {} warps to {}", warps.size(), file.getAbsolutePath());
-            return true;
-        } catch (IOException e) {
-            NeoEssentials.LOGGER.error("Failed to save warps: {}", e.getMessage(), e);
-            return false;
-        }
-    }
-      @Override
-    public Map<String, WarpData> loadWarps() {
-        Map<String, WarpData> warps = new HashMap<>();
-        
-        NeoEssentials.LOGGER.info("JsonStorageHandler: Loading warps from {}", WARPS_FILE);
-        
-        try {
-            File file = new File(WARPS_FILE);
-            
-            if (!file.exists()) {
-                NeoEssentials.LOGGER.info("Warps file doesn't exist yet at {}", file.getAbsolutePath());
-                return warps;
-            }
-            
-            NeoEssentials.LOGGER.debug("Reading warps file: {}", file.getAbsolutePath());
-            
-            JsonObject rootObj;
-            try (FileReader reader = new FileReader(file)) {
-                rootObj = JsonParser.parseReader(reader).getAsJsonObject();
-            }
-            
-            if (rootObj.has("warps")) {
-                JsonObject warpsObj = rootObj.getAsJsonObject("warps");
-                NeoEssentials.LOGGER.debug("Found {} warps in JSON file", warpsObj.size());
-                
-                for (Map.Entry<String, JsonElement> entry : warpsObj.entrySet()) {
-                    String warpName = entry.getKey();
-                    
-                    try {
-                        JsonObject warpObj = entry.getValue().getAsJsonObject();
-                        
-                        String name = warpObj.get("name").getAsString();
-                        String dimension = warpObj.get("dimension").getAsString();
-                        
-                        // Load position
-                        JsonObject posObj = warpObj.getAsJsonObject("position");
-                        int x = posObj.get("x").getAsInt();
-                        int y = posObj.get("y").getAsInt();
-                        int z = posObj.get("z").getAsInt();
-                        BlockPos pos = new BlockPos(x, y, z);
-                        
-                        // Load rotation
-                        float pitch = warpObj.get("pitch").getAsFloat();
-                        float yaw = warpObj.get("yaw").getAsFloat();
-                        
-                        // Load permission
-                        String permission = null;
-                        if (warpObj.has("permission")) {
-                            permission = warpObj.get("permission").getAsString();
-                        }
-                        
-                        warps.put(warpName, new WarpData(name, dimension, pos, pitch, yaw, permission));
-                        NeoEssentials.LOGGER.debug("Successfully loaded warp '{}' at [{}, {}, {}] in dimension '{}'", 
-                            name, x, y, z, dimension);
-                    } catch (Exception e) {
-                        NeoEssentials.LOGGER.error("Error loading warp '{}': {}", warpName, e.getMessage());
-                    }
-                }
-                
-                NeoEssentials.LOGGER.info("Successfully loaded {} warps", warps.size());
-            } else {
-                NeoEssentials.LOGGER.warn("No 'warps' object found in JSON file");
-            }
-            
-            return warps;
-        } catch (Exception e) {
-            NeoEssentials.LOGGER.error("Failed to load warps: {}", e.getMessage(), e);
-            return warps;
-        }
-    }
+
     
     @Override
     public boolean saveKits(Map<String, KitManager.Kit> kits, Map<UUID, Map<String, Long>> cooldowns) {

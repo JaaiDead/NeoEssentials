@@ -3,15 +3,11 @@ package com.zerog.neoessentials.commands;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.zerog.neoessentials.NeoEssentials;
-import com.zerog.neoessentials.data.HomeManager;
 import com.zerog.neoessentials.data.KitManager;
-import com.zerog.neoessentials.data.WarpManager;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.server.level.ServerPlayer;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -57,48 +53,6 @@ public class TabCompletionUtil {
         "day", "night", "noon", "midnight"
     };
 
-    /**
-     * Provides home name suggestions for the current player.
-     */
-    public static final SuggestionProvider<CommandSourceStack> HOME_SUGGESTIONS = (context, builder) -> {
-        try {
-            ServerPlayer player = context.getSource().getPlayerOrException();
-            HomeManager homeManager = NeoEssentials.getInstance().getDataManager().getHomeManager();
-            
-            if (homeManager != null) {
-                Set<String> homeNames = homeManager.getHomes(player.getUUID()).keySet();
-                return SharedSuggestionProvider.suggest(homeNames, builder);
-            }
-        } catch (Exception e) {
-            // Fallback to common home names
-            return SharedSuggestionProvider.suggest(
-                new String[]{"home", "base", "farm", "mine"}, 
-                builder
-            );
-        }
-        return Suggestions.empty();
-    };
-
-    /**
-     * Provides warp name suggestions.
-     */
-    public static final SuggestionProvider<CommandSourceStack> WARP_SUGGESTIONS = (context, builder) -> {
-        try {
-            WarpManager warpManager = NeoEssentials.getInstance().getDataManager().getWarpManager();
-            
-            if (warpManager != null) {
-                Set<String> warpNames = warpManager.getAllWarps().keySet();
-                return SharedSuggestionProvider.suggest(warpNames, builder);
-            }
-        } catch (Exception e) {
-            // Fallback to common warp names
-            return SharedSuggestionProvider.suggest(
-                new String[]{"spawn", "pvp", "resource", "end", "nether"}, 
-                builder
-            );
-        }
-        return Suggestions.empty();
-    };
 
     /**
      * Provides kit name suggestions.

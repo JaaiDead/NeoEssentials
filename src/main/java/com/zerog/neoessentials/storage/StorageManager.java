@@ -3,9 +3,7 @@ package com.zerog.neoessentials.storage;
 import com.zerog.neoessentials.NeoEssentials;
 import com.zerog.neoessentials.config.DatabaseConfig;
 import com.zerog.neoessentials.config.StorageType;
-import com.zerog.neoessentials.data.HomeData;
 import com.zerog.neoessentials.data.KitManager;
-import com.zerog.neoessentials.data.WarpData;
 
 import java.util.List;
 import java.util.Map;
@@ -76,86 +74,8 @@ public class StorageManager {
     public StorageHandler getStorageHandler() {
         return storageHandler;
     }
-      /**
-     * Save home data for a player
-     * 
-     * @param uuid The player UUID
-     * @param homes The home data
-     * @return True if successful, false otherwise
-     */
-    public boolean saveHomeData(UUID uuid, Map<String, HomeData> homes) {
-        if (storageHandler != null) {
-            try {
-                return storageHandler.saveHomeData(uuid, homes);
-            } catch (Exception e) {
-                NeoEssentials.LOGGER.error("Error saving home data for player {}: {}", uuid, e.getMessage(), e);
-            }
-        } else {
-            NeoEssentials.LOGGER.error("Cannot save home data: Storage handler is not initialized");
-        }
-        return false;
-    }
-    
-    /**
-     * Load home data for a player
-     * 
-     * @param uuid The player UUID
-     * @return The home data, or an empty map if an error occurs
-     */
-    public Map<String, HomeData> loadHomeData(UUID uuid) {
-        if (storageHandler != null) {
-            try {
-                return storageHandler.loadHomeData(uuid);
-            } catch (Exception e) {
-                NeoEssentials.LOGGER.error("Error loading home data for player {}: {}", uuid, e.getMessage(), e);
-            }
-        } else {
-            NeoEssentials.LOGGER.error("Cannot load home data: Storage handler is not initialized");
-        }
-        return Map.of();
-    }
-    
-    /**
-     * Save all warps
-     * 
-     * @param warps The warps to save
-     * @return True if successful, false otherwise
-     */
-    public boolean saveWarps(Map<String, WarpData> warps) {
-        if (storageHandler != null) {
-            try {
-                NeoEssentials.LOGGER.debug("Saving {} warps via storage manager", warps.size());
-                return storageHandler.saveWarps(warps);
-            } catch (Exception e) {
-                NeoEssentials.LOGGER.error("Error saving warps: {}", e.getMessage(), e);
-            }
-        } else {
-            NeoEssentials.LOGGER.error("Cannot save warps: Storage handler is not initialized");
-        }
-        return false;
-    }
-    
-    /**
-     * Load all warps
-     * 
-     * @return The warps, or an empty map if an error occurs
-     */
-    public Map<String, WarpData> loadWarps() {
-        if (storageHandler != null) {
-            try {
-                NeoEssentials.LOGGER.debug("Loading warps via storage manager");
-                Map<String, WarpData> warps = storageHandler.loadWarps();
-                NeoEssentials.LOGGER.debug("Storage manager loaded {} warps", warps.size());
-                return warps;
-            } catch (Exception e) {
-                NeoEssentials.LOGGER.error("Error loading warps: {}", e.getMessage(), e);
-            }
-        } else {
-            NeoEssentials.LOGGER.error("Cannot load warps: Storage handler is not initialized");
-        }
-        return Map.of();
-    }
-    
+
+
     /**
      * Save all kits
      * 

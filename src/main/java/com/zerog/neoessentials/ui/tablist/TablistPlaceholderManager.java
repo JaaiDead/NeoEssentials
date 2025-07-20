@@ -433,7 +433,7 @@ public class TablistPlaceholderManager {
         
         // Check for missing placeholders first (only in debug mode)
         if (NeoEssentials.LOGGER.isDebugEnabled()) {
-            logMissingPlaceholders(text);
+           // logMissingPlaceholders(text);
         }
         
         // First process standard placeholders
@@ -962,7 +962,7 @@ public class TablistPlaceholderManager {
     public void logMissingPlaceholders(String text) {
         List<String> missing = findMissingPlaceholders(text);
         if (!missing.isEmpty()) {
-            NeoEssentials.LOGGER.warn("Missing placeholders in text: {}", String.join(", ", missing));
+            // NeoEssentials.LOGGER.warn("Missing placeholders in text: {}", String.join(", ", missing));
         }
     }
     

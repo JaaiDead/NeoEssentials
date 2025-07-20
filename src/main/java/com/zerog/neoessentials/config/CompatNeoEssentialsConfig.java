@@ -3,7 +3,6 @@ package com.zerog.neoessentials.config;
 import com.zerog.neoessentials.NeoEssentials;
 import java.util.HashMap;
 import java.util.Map;
-import com.zerog.neoessentials.NeoEssentials;
 
 /**
  * Compatibility layer that adapts our TOML configs to the old config structure.
@@ -34,23 +33,7 @@ public class CompatNeoEssentialsConfig {
         // Initialize default permissions if needed
         // We don't need to pre-populate other values since we use lazy loading now
         try {
-            // Pre-cache some frequently used command states using our safe utility
-            if (ConfigUtil.isConfigAvailable(GeneralConfig.ENABLE_HOMES)) {
-                commandsEnabled.put("home", GeneralConfig.ENABLE_HOMES.get());
-                NeoEssentials.LOGGER.debug("Pre-cached home command state: " + commandsEnabled.get("home"));
-            }
-            
-            if (ConfigUtil.isConfigAvailable(GeneralConfig.ENABLE_WARPS)) {
-                commandsEnabled.put("warp", GeneralConfig.ENABLE_WARPS.get());
-                NeoEssentials.LOGGER.debug("Pre-cached warp command state: " + commandsEnabled.get("warp"));
-            }
-            
-            if (ConfigUtil.isConfigAvailable(GeneralConfig.ENABLE_TELEPORTATION)) {
-                boolean teleportEnabled = GeneralConfig.ENABLE_TELEPORTATION.get();
-                commandsEnabled.put("tpa", teleportEnabled);
-                commandsEnabled.put("back", teleportEnabled);
-                NeoEssentials.LOGGER.debug("Pre-cached teleport commands state: " + teleportEnabled);
-            }
+
               if (ConfigUtil.isConfigAvailable(GeneralConfig.ENABLE_KITS)) {
                 commandsEnabled.put("kit", GeneralConfig.ENABLE_KITS.get());
                 NeoEssentials.LOGGER.debug("Pre-cached kit command state: " + commandsEnabled.get("kit"));
@@ -63,9 +46,6 @@ public class CompatNeoEssentialsConfig {
         
         // Initialize default permissions map for commonly used permissions
         try {
-            defaultPermissions.put("neoessentials.command.home", true);
-            defaultPermissions.put("neoessentials.command.warp", true);
-            defaultPermissions.put("neoessentials.command.tpa", true);
             defaultPermissions.put("neoessentials.command.back", true);
             defaultPermissions.put("neoessentials.command.spawn", true);
             defaultPermissions.put("neoessentials.command.kit", true);
@@ -127,49 +107,8 @@ public class CompatNeoEssentialsConfig {
     public double getStartingBalance() {
         return 100.0; // Default value since economy system is removed
     }
-    
-    /**
-     * Gets whether teleportation is enabled
-     * @return True if teleportation is enabled
-     */
-    public boolean isTeleportEnabled() {
-        return ConfigUtil.getConfigSafe(GeneralConfig.ENABLE_TELEPORTATION, true);
-    }
-    
-    /**
-     * Gets the teleport cooldown in seconds
-     * @return The cooldown in seconds
-     */
-    public int getTeleportCooldown() {
-        if (!isTeleportEnabled()) return 30;
-        return ConfigUtil.getConfigSafe(HomeConfig.COOLDOWN_SECONDS, 30);
-    }
-    
-    /**
-     * Gets the teleport warmup in seconds
-     * @return The warmup in seconds
-     */
-    public int getTeleportWarmup() {
-        if (!isTeleportEnabled()) return 3;
-        return ConfigUtil.getConfigSafe(HomeConfig.WARMUP_SECONDS, 3);
-    }
-    
-    /**
-     * Gets the maximum number of homes a player can have
-     * @return The max homes
-     */
-    public int getMaxHomes() {
-        if (!isTeleportEnabled()) return 3;
-        return ConfigUtil.getConfigSafe(HomeConfig.DEFAULT_MAX_HOMES, 3);
-    }
-    
-    /**
-     * Gets whether warps are enabled
-     * @return True if warps are enabled
-     */
-    public boolean isWarpsEnabled() {
-        return ConfigUtil.getConfigSafe(GeneralConfig.ENABLE_WARPS, true);
-    }
+
+
       /**
      * Gets whether a command is enabled
      * @param command The command name
