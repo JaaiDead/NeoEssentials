@@ -39,20 +39,12 @@ public class ServerWelcomeMessage {
         String serverTime = now.format(DateTimeFormatter.ofPattern("h:mm a"));
 
         // Send messages (with color formatting)
-        player.sendSystemMessage(Component.literal(TextUtil.formatText(
-                "&eWelcome, &6" + playerName + "&e!"
-        )));
-        player.sendSystemMessage(Component.literal(TextUtil.formatText(
-                "&cYou have &4" + unreadMessages + " &cnew messages! Type &d/inbox &cto view your mail."
-        )));
-        player.sendSystemMessage(Component.literal(TextUtil.formatText(
-                "&6Players online: &c" + onlinePlayers
-        )));
-        player.sendSystemMessage(Component.literal(TextUtil.formatText(
-                "&6Server time: &c" + serverTime
-        )));
-        player.sendSystemMessage(Component.literal(TextUtil.formatText(
-                "&eType &d/help &efor a list of commands."
-        )));
+        String welcomeMessage = "&6Welcome, &e" + playerName + "&6!\n"
+                + "&6You have &c" + unreadMessages + "&6 new messages! Type &c/mail&6 to view your mail.\n"
+                + "&6Players online: &c" + onlinePlayers + "\n"
+                + "&6World time: &c" + serverTime + "&6.\n\n"
+                + "&6Type &c/help&6 for a list of available commands.";
+
+        player.sendSystemMessage(Component.literal(TextUtil.formatText(welcomeMessage)));
     }
 }
