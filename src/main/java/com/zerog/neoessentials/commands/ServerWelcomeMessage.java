@@ -40,7 +40,7 @@ public class ServerWelcomeMessage {
 
         // Send messages (with color formatting)
         String welcomeMessage = "&6Welcome, &e" + playerName + "&6!\n"
-                + "&6You have &c" + unreadMessages + "&6 new messages! Type &c/mail&6 to view your mail.\n"
+                + "&6You have &c" + unreadMessages + "&6 new messages! Type &c/inbox&6 to view your mail.\n"
                 + "&6Players online: &c" + onlinePlayers + "\n"
                 + "&6World time: &c" + serverTime + "&6.\n\n"
                 + "&6Type &c/help&6 for a list of available commands.";

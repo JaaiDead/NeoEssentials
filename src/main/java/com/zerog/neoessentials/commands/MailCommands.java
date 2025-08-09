@@ -12,7 +12,6 @@ import com.zerog.neoessentials.data.UserManager;
 import com.zerog.neoessentials.utils.TextUtil;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -63,8 +62,13 @@ public class MailCommands {
                                 .then(Commands.argument("message", StringArgumentType.greedyString())
                                         .executes(this::executeMailSend))));
 
-        // Register aliases
+        LiteralArgumentBuilder<CommandSourceStack> inboxCommand = Commands.literal("inbox")
+                .requires(source -> CommandManager.hasPermission(source, "neoessentials.mail"))
+                .executes(this::executeMailSummary);
+
+        // Register both
         dispatcher.register(mailCommand);
+        dispatcher.register(inboxCommand);
     }
     
     /**
